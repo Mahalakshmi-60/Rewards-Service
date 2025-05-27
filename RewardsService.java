@@ -1,10 +1,11 @@
 package org.example.Service;
 
-
+import  org.example.Exception.RewardsCalculationException;
 import org.example.Model.CustomerReward;
 import org.example.Model.MonthlyReward;
 import org.example.Model.Transaction;
 import org.example.data.MockTransactionData;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.format.TextStyle;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Component
 public class RewardsService
    {
     public List<CustomerReward> calculateRewards( )
@@ -53,7 +55,13 @@ public class RewardsService
 
        public int CalculatePoints(double amount) {
         int points=0;
-        if(amount>100)
+
+           if (amount < 0)
+           {
+              throw  new RewardsCalculationException("Transaction amount cannot be negative.");
+           }
+
+           if(amount>100)
         {
             points= (int) (points+((amount-100)*2));
             points=points+50;
